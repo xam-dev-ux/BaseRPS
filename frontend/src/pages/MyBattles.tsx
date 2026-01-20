@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { motion } from 'framer-motion';
 import { useActiveMatches, useMatch } from '@/contracts/hooks/useBaseRPS';
@@ -146,7 +146,7 @@ export function MyBattles() {
 
         {!activeMatchIds || activeMatchIds.length === 0 ? (
           <div className="card text-center py-8 text-gray-400">
-            No matches found. <a href="/play" className="text-primary-400 hover:underline">Start a new one!</a>
+            No matches found. <Link to="/play" className="text-primary-400 hover:underline">Start a new one!</Link>
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

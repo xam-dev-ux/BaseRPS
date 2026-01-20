@@ -141,24 +141,52 @@ export function useRoundInfo(matchId: bigint | undefined, round: number) {
 }
 
 export function useMatchPhase(matchInfo: MatchInfo | null, roundInfo: RoundInfo | null) {
+  // Debug logging
+  console.log('[useMatchPhase] matchInfo:', matchInfo ? {
+    state: matchInfo.state,
+    currentRound: matchInfo.currentRound,
+    isPlayer1: matchInfo.isPlayer1,
+    isPlayer2: matchInfo.isPlayer2,
+  } : null);
+  console.log('[useMatchPhase] roundInfo:', roundInfo ? {
+    myCommitted: roundInfo.myCommitted,
+    opponentCommitted: roundInfo.opponentCommitted,
+    myRevealed: roundInfo.myRevealed,
+    opponentRevealed: roundInfo.opponentRevealed,
+    p1Revealed: roundInfo.p1Revealed,
+    p2Revealed: roundInfo.p2Revealed,
+    commitDeadline: roundInfo.commitDeadline,
+    revealDeadline: roundInfo.revealDeadline,
+  } : null);
+
   if (!matchInfo) return 'loading';
 
+  let phase: string;
   switch (matchInfo.state) {
     case MATCH_STATE.WaitingForP2:
-      return 'waiting';
+      phase = 'waiting';
+      break;
     case MATCH_STATE.BothJoined:
-      return roundInfo?.myCommitted ? 'waiting-opponent-commit' : 'commit';
+      phase = roundInfo?.myCommitted ? 'waiting-opponent-commit' : 'commit';
+      break;
     case MATCH_STATE.BothCommitted:
     case MATCH_STATE.P1Revealed:
     case MATCH_STATE.P2Revealed:
-      return roundInfo?.myRevealed ? 'waiting-opponent-reveal' : 'reveal';
+      phase = roundInfo?.myRevealed ? 'waiting-opponent-reveal' : 'reveal';
+      break;
     case MATCH_STATE.Completed:
-      return 'completed';
+      phase = 'completed';
+      break;
     case MATCH_STATE.Expired:
-      return 'expired';
+      phase = 'expired';
+      break;
     case MATCH_STATE.Cancelled:
-      return 'cancelled';
+      phase = 'cancelled';
+      break;
     default:
-      return 'unknown';
+      phase = 'unknown';
   }
+
+  console.log('[useMatchPhase] determined phase:', phase);
+  return phase;
 }
