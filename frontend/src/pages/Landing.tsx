@@ -155,7 +155,7 @@ export function Landing() {
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to Battle?</h2>
           <p className="text-gray-400 mb-8 max-w-xl mx-auto">
-            Connect your wallet and start playing. Minimum bet is just 0.001 ETH.
+            Connect your wallet and start playing. Minimum bet is just 0.00001 ETH.
           </p>
           {isConnected ? (
             <Link to="/play" className="btn btn-primary py-3 px-8 text-lg">

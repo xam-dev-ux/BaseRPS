@@ -88,12 +88,12 @@ export function CreateMatchForm({ onSuccess: _onSuccess }: CreateMatchFormProps)
           value={betAmount}
           onChange={(e) => setBetAmount(e.target.value)}
           step="0.001"
-          min={minBet ? formatEther(minBet) : '0.001'}
+          min={minBet ? formatEther(minBet) : '0.00001'}
           max={maxBet ? formatEther(maxBet) : '1'}
           className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:border-primary-500 focus:outline-none"
         />
         <div className="text-xs text-gray-500 mt-1">
-          Min: {minBet ? formatEther(minBet) : '0.001'} ETH |
+          Min: {minBet ? formatEther(minBet) : '0.00001'} ETH |
           Max: {maxBet ? formatEther(maxBet) : '1'} ETH
         </div>
       </div>
