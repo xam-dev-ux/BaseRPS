@@ -242,11 +242,11 @@ export function useCancelMatch() {
 
 export function useCommitChoice() {
   const { address, abi } = useBaseRPSContract();
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { writeContractAsync, data: hash, isPending, error } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
 
   const commitChoice = async (matchId: bigint, commitHash: `0x${string}`) => {
-    writeContract({
+    await writeContractAsync({
       address,
       abi,
       functionName: 'commitChoice',
@@ -266,7 +266,7 @@ export function useCommitChoice() {
 
 export function useRevealChoice() {
   const { address, abi } = useBaseRPSContract();
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { writeContractAsync, data: hash, isPending, error } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
 
   const revealChoice = async (
@@ -274,7 +274,7 @@ export function useRevealChoice() {
     choice: Choice,
     salt: `0x${string}`
   ) => {
-    writeContract({
+    await writeContractAsync({
       address,
       abi,
       functionName: 'revealChoice',
