@@ -1,55 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/icon.png" />
+    <link rel="icon" type="image/png" href="/icon-1024.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Basic Meta -->
-    <title>BaseRPS - Battle for ETH</title>
-    <meta name="description" content="PvP Rock Paper Scissors on Base. Commit-reveal mechanics, overtime system, instant payouts." />
     <!-- Base App ID -->
     <meta name="base:app_id" content="696f8893c0ab25addaaaf7be" />
-    <!-- Open Graph / Social -->
+
+    <!-- Primary Meta Tags -->
+    <title>BaseRPS - Battle for ETH</title>
+    <meta name="title" content="BaseRPS - Battle for ETH" />
+    <meta name="description" content="PvP Rock Paper Scissors on Base. Commit-reveal mechanics, overtime system, instant payouts." />
+
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://base-rps-eight.vercel.app/" />
     <meta property="og:title" content="BaseRPS - Battle for ETH" />
     <meta property="og:description" content="PvP Rock Paper Scissors on Base. Commit-reveal mechanics, overtime system, instant payouts." />
-    <meta property="og:image" content="https://base-rps-eight.vercel.app/og-image.png" />
-    <meta property="og:url" content="https://base-rps-eight.vercel.app" />
+    <meta property="og:image" content="https://base-rps-eight.vercel.app/cover-1200x630.png" />
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="BaseRPS - Battle for ETH" />
-    <meta name="twitter:description" content="PvP Rock Paper Scissors on Base. Commit-reveal mechanics, overtime system, instant payouts." />
-    <meta name="twitter:image" content="https://base-rps-eight.vercel.app/og-image.png" />
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://base-rps-eight.vercel.app/" />
+    <meta property="twitter:title" content="BaseRPS - Battle for ETH" />
+    <meta property="twitter:description" content="PvP Rock Paper Scissors on Base. Commit-reveal mechanics, overtime system, instant payouts." />
+    <meta property="twitter:image" content="https://base-rps-eight.vercel.app/cover-1200x630.png" />
 
-    <!-- Farcaster Frame / Base Mini App Metadata -->
-    <meta name="fc:frame" content="vNext" />
-    <meta name="fc:frame:image" content="https://base-rps-eight.vercel.app/og-image.png" />
-    <meta name="fc:frame:image:aspect_ratio" content="3:2" />
-    <meta name="fc:frame:button:1" content="Play Now" />
-    <meta name="fc:frame:button:1:action" content="launch_frame" />
-    <meta name="fc:frame:button:1:target" content="https://base-rps-eight.vercel.app" />
-
-    <!-- Mini App Embed Metadata (JSON format) -->
+    <!-- Farcaster Mini App Metadata -->
     <meta
-      name="fc:miniapp"
-      content='{"version":"next","imageUrl":"https://base-rps-eight.vercel.app/og-image.png","button":{"title":"Play Now","action":{"type":"launch_frame","url":"https://base-rps-eight.vercel.app","name":"BaseRPS","splashImageUrl":"https://base-rps-eight.vercel.app/splash.png","splashBackgroundColor":"#1e3a8a"}}}'
+      property="fc:miniapp"
+      content='{
+        "version": "next",
+        "imageUrl": "https://base-rps-eight.vercel.app/cover-1200x630.png",
+        "button": {
+          "title": "Play Now",
+          "action": {
+            "type": "launch_miniapp",
+            "name": "BaseRPS",
+            "url": "https://base-rps-eight.vercel.app",
+            "splashImageUrl": "https://base-rps-eight.vercel.app/splash.png",
+            "splashBackgroundColor": "#1e3a8a"
+          }
+        }
+      }'
     />
 
     <!-- Theme Color -->
     <meta name="theme-color" content="#1e3a8a" />
 
-    <!-- Apple Mobile Web App -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="BaseRPS" />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="/icon-1024.png" />
 
     <!-- Manifest -->
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="/.well-known/farcaster.json" />
   </head>
-  <body class="bg-gray-900 text-white">
+  <body class="bg-gray-950 text-white antialiased">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -8,23 +8,24 @@
     "version": "1",
     "name": "BaseRPS",
     "homeUrl": "https://base-rps-eight.vercel.app",
-    "imageUrl": "https://base-rps-eight.vercel.app/og-image.png",
-    "iconUrl": "https://base-rps-eight.vercel.app/icon.png",
+    "imageUrl": "https://base-rps-eight.vercel.app/cover-1200x630.png",
+    "iconUrl": "https://base-rps-eight.vercel.app/icon-1024.png",
     "splashImageUrl": "https://base-rps-eight.vercel.app/splash.png",
     "splashBackgroundColor": "#1e3a8a",
     "subtitle": "Battle for ETH",
     "description": "PvP Rock Paper Scissors on Base. Commit-reveal mechanics, overtime system, instant payouts.",
     "screenshotUrls": [
       "https://base-rps-eight.vercel.app/screenshots/screenshot-1.png",
-      "https://base-rps-eight.vercel.app/screenshots/screenshot-2.png"
+      "https://base-rps-eight.vercel.app/screenshots/screenshot-2.png",
+      "https://base-rps-eight.vercel.app/screenshots/screenshot-3.png"
     ],
     "primaryCategory": "games",
     "tags": ["game", "pvp", "rock-paper-scissors", "base", "betting"],
-    "heroImageUrl": "https://base-rps-eight.vercel.app/og-image.png",
+    "heroImageUrl": "https://base-rps-eight.vercel.app/cover-1200x630.png",
     "tagline": "PvP Rock Paper Scissors",
     "ogTitle": "BaseRPS - Battle for ETH",
     "ogDescription": "PvP Rock Paper Scissors on Base. Commit-reveal mechanics, overtime system, instant payouts.",
-    "ogImageUrl": "https://base-rps-eight.vercel.app/og-image.png",
+    "ogImageUrl": "https://base-rps-eight.vercel.app/cover-1200x630.png",
     "noindex": false
   }
 }
