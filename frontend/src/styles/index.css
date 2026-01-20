@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg font-semibold transition-all duration-200;
+  }
+
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-700 hover:bg-gray-600 text-white;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white;
+  }
+
+  .card {
+    @apply bg-gray-800 rounded-xl p-6 border border-gray-700;
+  }
+
+  .choice-btn {
+    @apply w-24 h-24 rounded-xl text-4xl flex items-center justify-center
+           transition-all duration-200 hover:scale-110 active:scale-95
+           bg-gray-800 border-2 border-gray-700 hover:border-primary-500;
+  }
+
+  .choice-btn.selected {
+    @apply border-primary-500 bg-primary-900/50 ring-2 ring-primary-500 ring-offset-2 ring-offset-gray-900;
+  }
+
+  .choice-btn:disabled {
+    @apply opacity-50 cursor-not-allowed hover:scale-100;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-purple-400;
+  }
+
+  .overtime-glow {
+    box-shadow: 0 0 30px var(--overtime-color, rgba(59, 130, 246, 0.5));
+  }
+}
+
+/* Overtime intensity levels */
+.overtime-mild {
+  --overtime-color: rgba(99, 102, 241, 0.5);
+}
+
+.overtime-moderate {
+  --overtime-color: rgba(139, 92, 246, 0.6);
+}
+
+.overtime-intense {
+  --overtime-color: rgba(249, 115, 22, 0.7);
+}
+
+.overtime-epic {
+  --overtime-color: rgba(239, 68, 68, 0.8);
+  animation: epic-pulse 0.3s ease-in-out infinite;
+}
+
+@keyframes epic-pulse {
+  0%, 100% {
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 50px rgba(239, 68, 68, 1);
+  }
+}

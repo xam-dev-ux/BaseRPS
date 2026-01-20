@@ -1,0 +1,21 @@
+{
+  "accountAssociation": {
+    "header": "REPLACE_WITH_YOUR_HEADER",
+    "payload": "REPLACE_WITH_YOUR_PAYLOAD",
+    "signature": "REPLACE_WITH_YOUR_SIGNATURE"
+  },
+  "frame": {
+    "version": "1",
+    "name": "BaseRPS",
+    "iconUrl": "https://YOUR_DOMAIN/icon.png",
+    "homeUrl": "https://YOUR_DOMAIN",
+    "imageUrl": "https://YOUR_DOMAIN/og-image.png",
+    "buttonTitle": "Play Now",
+    "splashImageUrl": "https://YOUR_DOMAIN/splash.png",
+    "splashBackgroundColor": "#1e3a8a",
+    "subtitle": "Battle for ETH",
+    "description": "PvP Rock Paper Scissors on Base. Commit-reveal mechanics, overtime system, instant payouts.",
+    "primaryCategory": "games",
+    "tags": ["game", "pvp", "rock-paper-scissors", "eth", "base", "betting", "web3"]
+  }
+}

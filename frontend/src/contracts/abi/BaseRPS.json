@@ -1,0 +1,300 @@
+[
+  {
+    "type": "constructor",
+    "inputs": [
+      { "name": "_commissionWallets", "type": "address[]", "internalType": "address[]" },
+      { "name": "_commissionRate", "type": "uint256", "internalType": "uint256" },
+      { "name": "_minBet", "type": "uint256", "internalType": "uint256" },
+      { "name": "_maxBet", "type": "uint256", "internalType": "uint256" }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "createMatch",
+    "inputs": [
+      { "name": "gameMode", "type": "uint8", "internalType": "enum IBaseRPS.GameMode" },
+      { "name": "isPrivate", "type": "bool", "internalType": "bool" },
+      { "name": "privateCodeHash", "type": "bytes32", "internalType": "bytes32" }
+    ],
+    "outputs": [{ "name": "matchId", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "joinMatch",
+    "inputs": [{ "name": "matchId", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "joinPrivateMatch",
+    "inputs": [
+      { "name": "matchId", "type": "uint256", "internalType": "uint256" },
+      { "name": "privateCode", "type": "string", "internalType": "string" }
+    ],
+    "outputs": [],
+    "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "cancelMatch",
+    "inputs": [{ "name": "matchId", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "commitChoice",
+    "inputs": [
+      { "name": "matchId", "type": "uint256", "internalType": "uint256" },
+      { "name": "commitHash", "type": "bytes32", "internalType": "bytes32" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "revealChoice",
+    "inputs": [
+      { "name": "matchId", "type": "uint256", "internalType": "uint256" },
+      { "name": "choice", "type": "uint8", "internalType": "enum IBaseRPS.Choice" },
+      { "name": "salt", "type": "bytes32", "internalType": "bytes32" }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "claimTimeout",
+    "inputs": [{ "name": "matchId", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getMatch",
+    "inputs": [{ "name": "matchId", "type": "uint256", "internalType": "uint256" }],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct IBaseRPS.Match",
+        "components": [
+          { "name": "player1", "type": "address", "internalType": "address" },
+          { "name": "player2", "type": "address", "internalType": "address" },
+          { "name": "betAmount", "type": "uint256", "internalType": "uint256" },
+          { "name": "createdAt", "type": "uint40", "internalType": "uint40" },
+          { "name": "expiresAt", "type": "uint40", "internalType": "uint40" },
+          { "name": "p1Wins", "type": "uint8", "internalType": "uint8" },
+          { "name": "p2Wins", "type": "uint8", "internalType": "uint8" },
+          { "name": "currentRound", "type": "uint8", "internalType": "uint8" },
+          { "name": "gameMode", "type": "uint8", "internalType": "enum IBaseRPS.GameMode" },
+          { "name": "state", "type": "uint8", "internalType": "enum IBaseRPS.MatchState" },
+          { "name": "isPrivate", "type": "bool", "internalType": "bool" },
+          { "name": "privateCodeHash", "type": "bytes32", "internalType": "bytes32" }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getRoundState",
+    "inputs": [
+      { "name": "matchId", "type": "uint256", "internalType": "uint256" },
+      { "name": "round", "type": "uint8", "internalType": "uint8" }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct IBaseRPS.RoundState",
+        "components": [
+          { "name": "p1Commit", "type": "bytes32", "internalType": "bytes32" },
+          { "name": "p2Commit", "type": "bytes32", "internalType": "bytes32" },
+          { "name": "p1Choice", "type": "uint8", "internalType": "enum IBaseRPS.Choice" },
+          { "name": "p2Choice", "type": "uint8", "internalType": "enum IBaseRPS.Choice" },
+          { "name": "tieCount", "type": "uint8", "internalType": "uint8" },
+          { "name": "commitDeadline", "type": "uint40", "internalType": "uint40" },
+          { "name": "revealDeadline", "type": "uint40", "internalType": "uint40" },
+          { "name": "p1Revealed", "type": "bool", "internalType": "bool" },
+          { "name": "p2Revealed", "type": "bool", "internalType": "bool" }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getPlayerStats",
+    "inputs": [{ "name": "player", "type": "address", "internalType": "address" }],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct IBaseRPS.PlayerStats",
+        "components": [
+          { "name": "totalMatches", "type": "uint32", "internalType": "uint32" },
+          { "name": "wins", "type": "uint32", "internalType": "uint32" },
+          { "name": "losses", "type": "uint32", "internalType": "uint32" },
+          { "name": "ties", "type": "uint32", "internalType": "uint32" },
+          { "name": "currentStreak", "type": "uint32", "internalType": "uint32" },
+          { "name": "bestStreak", "type": "uint32", "internalType": "uint32" },
+          { "name": "overtimeWins", "type": "uint32", "internalType": "uint32" },
+          { "name": "overtimeLosses", "type": "uint32", "internalType": "uint32" },
+          { "name": "rockCount", "type": "uint32", "internalType": "uint32" },
+          { "name": "paperCount", "type": "uint32", "internalType": "uint32" },
+          { "name": "scissorsCount", "type": "uint32", "internalType": "uint32" }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getActiveMatches",
+    "inputs": [{ "name": "player", "type": "address", "internalType": "address" }],
+    "outputs": [{ "name": "", "type": "uint256[]", "internalType": "uint256[]" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getOpenMatches",
+    "inputs": [
+      { "name": "offset", "type": "uint256", "internalType": "uint256" },
+      { "name": "limit", "type": "uint256", "internalType": "uint256" }
+    ],
+    "outputs": [{ "name": "", "type": "uint256[]", "internalType": "uint256[]" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getOpenMatchCount",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getWinsRequired",
+    "inputs": [{ "name": "mode", "type": "uint8", "internalType": "enum IBaseRPS.GameMode" }],
+    "outputs": [{ "name": "", "type": "uint8", "internalType": "uint8" }],
+    "stateMutability": "pure"
+  },
+  {
+    "type": "function",
+    "name": "minBet",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "maxBet",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "commissionRate",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "matchCounter",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "event",
+    "name": "MatchCreated",
+    "inputs": [
+      { "name": "matchId", "type": "uint256", "indexed": true, "internalType": "uint256" },
+      { "name": "player1", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "betAmount", "type": "uint256", "indexed": false, "internalType": "uint256" },
+      { "name": "gameMode", "type": "uint8", "indexed": false, "internalType": "enum IBaseRPS.GameMode" },
+      { "name": "isPrivate", "type": "bool", "indexed": false, "internalType": "bool" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "MatchJoined",
+    "inputs": [
+      { "name": "matchId", "type": "uint256", "indexed": true, "internalType": "uint256" },
+      { "name": "player2", "type": "address", "indexed": true, "internalType": "address" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ChoiceCommitted",
+    "inputs": [
+      { "name": "matchId", "type": "uint256", "indexed": true, "internalType": "uint256" },
+      { "name": "player", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "round", "type": "uint8", "indexed": false, "internalType": "uint8" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ChoiceRevealed",
+    "inputs": [
+      { "name": "matchId", "type": "uint256", "indexed": true, "internalType": "uint256" },
+      { "name": "player", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "choice", "type": "uint8", "indexed": false, "internalType": "enum IBaseRPS.Choice" },
+      { "name": "round", "type": "uint8", "indexed": false, "internalType": "uint8" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "RoundResult",
+    "inputs": [
+      { "name": "matchId", "type": "uint256", "indexed": true, "internalType": "uint256" },
+      { "name": "round", "type": "uint8", "indexed": false, "internalType": "uint8" },
+      { "name": "winner", "type": "address", "indexed": false, "internalType": "address" },
+      { "name": "tieCount", "type": "uint8", "indexed": false, "internalType": "uint8" },
+      { "name": "isOvertime", "type": "bool", "indexed": false, "internalType": "bool" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "MatchCompleted",
+    "inputs": [
+      { "name": "matchId", "type": "uint256", "indexed": true, "internalType": "uint256" },
+      { "name": "winner", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "winnerPayout", "type": "uint256", "indexed": false, "internalType": "uint256" },
+      { "name": "totalCommission", "type": "uint256", "indexed": false, "internalType": "uint256" },
+      { "name": "wasDraw", "type": "bool", "indexed": false, "internalType": "bool" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "MatchExpired",
+    "inputs": [
+      { "name": "matchId", "type": "uint256", "indexed": true, "internalType": "uint256" },
+      { "name": "winner", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "refundAmount", "type": "uint256", "indexed": false, "internalType": "uint256" }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "MatchCancelled",
+    "inputs": [
+      { "name": "matchId", "type": "uint256", "indexed": true, "internalType": "uint256" },
+      { "name": "player1", "type": "address", "indexed": true, "internalType": "address" },
+      { "name": "refundAmount", "type": "uint256", "indexed": false, "internalType": "uint256" }
+    ],
+    "anonymous": false
+  }
+]
