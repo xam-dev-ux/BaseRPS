@@ -11,7 +11,7 @@ interface QuickMatchModalProps {
 }
 
 export function QuickMatchModal({ isOpen, onClose, onMatchFound }: QuickMatchModalProps) {
-  const [betAmount, setBetAmount] = useState('0.01');
+  const [betAmount, setBetAmount] = useState('0.00001');
   const [gameMode, setGameMode] = useState<GameMode>(GAME_MODE.BO1);
   const [isSearching, setIsSearching] = useState(false);
   const [searchStatus, setSearchStatus] = useState('');
@@ -59,7 +59,7 @@ export function QuickMatchModal({ isOpen, onClose, onMatchFound }: QuickMatchMod
     }
   };
 
-  const betPresets = ['0.005', '0.01', '0.05', '0.1'];
+  const betPresets = ['0.0001', '0.001', '0.01', '0.1'];
 
   return (
     <AnimatePresence>

@@ -12,7 +12,7 @@ interface CreateMatchFormProps {
 
 export function CreateMatchForm({ onSuccess: _onSuccess }: CreateMatchFormProps) {
   const [gameMode, setGameMode] = useState<GameMode>(GAME_MODE.BO1);
-  const [betAmount, setBetAmount] = useState('0.01');
+  const [betAmount, setBetAmount] = useState('0.00001');
   const [isPrivate, setIsPrivate] = useState(false);
   const [privateCode, setPrivateCode] = useState('');
 
