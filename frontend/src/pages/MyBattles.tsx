@@ -79,9 +79,17 @@ function MatchCard({
 export function MyBattles() {
   const navigate = useNavigate();
   const { address, isConnected } = useAccount();
-  const { data: activeMatchIdsData, isLoading, refetch } = useActiveMatches(address);
+  const { data: activeMatchIdsData, isLoading, refetch, error } = useActiveMatches(address);
 
   const activeMatchIds = activeMatchIdsData as bigint[] | undefined;
+
+  // Debug logging
+  console.log('[MyBattles] address:', address);
+  console.log('[MyBattles] isConnected:', isConnected);
+  console.log('[MyBattles] isLoading:', isLoading);
+  console.log('[MyBattles] error:', error);
+  console.log('[MyBattles] activeMatchIdsData:', activeMatchIdsData);
+  console.log('[MyBattles] activeMatchIds:', activeMatchIds);
 
   if (!isConnected) {
     return (

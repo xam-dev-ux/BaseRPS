@@ -13,11 +13,28 @@ import toast from 'react-hot-toast';
 export function Match() {
   const { matchId } = useParams<{ matchId: string }>();
   const navigate = useNavigate();
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const [privateCode, setPrivateCode] = useState('');
 
   const parsedMatchId = matchId ? BigInt(matchId) : undefined;
   const { matchInfo, isLoading, error } = useMatchInfo(parsedMatchId);
+
+  // Debug logging
+  console.log('[Match] matchId:', matchId);
+  console.log('[Match] address:', address);
+  console.log('[Match] isLoading:', isLoading);
+  console.log('[Match] error:', error);
+  console.log('[Match] matchInfo:', matchInfo ? {
+    state: matchInfo.state,
+    player1: matchInfo.player1,
+    player2: matchInfo.player2,
+    isPlayer1: matchInfo.isPlayer1,
+    isPlayer2: matchInfo.isPlayer2,
+    betAmount: matchInfo.betAmount?.toString(),
+    currentRound: matchInfo.currentRound,
+    p1Wins: matchInfo.p1Wins,
+    p2Wins: matchInfo.p2Wins,
+  } : null);
 
   const { joinMatch, isPending: isJoining } = useJoinMatch();
   const { joinPrivateMatch, isPending: isJoiningPrivate } = useJoinPrivateMatch();

@@ -102,16 +102,24 @@ function OpenMatchCard({
 
 export function Play() {
   const navigate = useNavigate();
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const [activeTab, setActiveTab] = useState<Tab>('join');
   const [joiningMatchId, setJoiningMatchId] = useState<bigint | undefined>();
   const [showQuickMatch, setShowQuickMatch] = useState(false);
 
-  const { data: openMatchCountData } = useOpenMatchCount();
-  const { data: openMatchIdsData, refetch: refetchOpenMatches } = useOpenMatches(0n, 20n);
+  const { data: openMatchCountData, error: countError } = useOpenMatchCount();
+  const { data: openMatchIdsData, refetch: refetchOpenMatches, error: matchesError } = useOpenMatches(0n, 20n);
 
   const openMatchCount = openMatchCountData as bigint | undefined;
   const openMatchIds = openMatchIdsData as bigint[] | undefined;
+
+  // Debug logging
+  console.log('[Play] address:', address);
+  console.log('[Play] isConnected:', isConnected);
+  console.log('[Play] openMatchCount:', openMatchCount?.toString());
+  console.log('[Play] openMatchIds:', openMatchIds?.map(id => id.toString()));
+  console.log('[Play] countError:', countError);
+  console.log('[Play] matchesError:', matchesError);
 
   const { joinMatch, isSuccess: joinSuccess } = useJoinMatch();
 
