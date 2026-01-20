@@ -14,6 +14,7 @@
     "generate:assets": "npm run generate:icons && npm run generate:social && npm run generate:screenshots"
   },
   "dependencies": {
+    "@farcaster/frame-sdk": "^0.0.64",
     "@tanstack/react-query": "^5.17.19",
     "connectkit": "^1.7.2",
     "framer-motion": "^10.18.0",

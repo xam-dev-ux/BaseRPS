@@ -32,9 +32,17 @@ export function BattleArena({ matchId, onMatchEnd }: BattleArenaProps) {
   const tieCount = roundInfo?.tieCount ?? 0;
   const overtimeUI = useOvertimeUI(tieCount);
 
+  // Calculate opponent wallet for push notifications
+  const opponentWallet = matchInfo
+    ? matchInfo.isPlayer1
+      ? matchInfo.player2
+      : matchInfo.player1
+    : undefined;
+
   // Set up event listeners
   useContractEvents({
     matchId,
+    opponentWallet: opponentWallet as `0x${string}` | undefined,
     onMatchJoined: () => refetchMatch(),
     onOpponentCommitted: () => refetchRound(),
     onOpponentRevealed: () => refetchRound(),

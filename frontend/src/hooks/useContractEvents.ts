@@ -3,6 +3,7 @@ import { useBaseRPSContract } from '@/contracts/hooks/useBaseRPS';
 import { useGameStore } from '@/store/useGameStore';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { useNotifications } from '@/hooks/useNotifications';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { zeroAddress, type Log } from 'viem';
 import toast from 'react-hot-toast';
 
@@ -11,6 +12,7 @@ type EventLog<T> = Log & { args: T };
 
 interface UseContractEventsProps {
   matchId: bigint;
+  opponentWallet?: `0x${string}`;
   onMatchJoined?: (player2: `0x${string}`) => void;
   onOpponentCommitted?: () => void;
   onOpponentRevealed?: (choice: number) => void;
@@ -20,6 +22,7 @@ interface UseContractEventsProps {
 
 export function useContractEvents({
   matchId,
+  opponentWallet,
   onMatchJoined,
   onOpponentCommitted,
   onOpponentRevealed,
@@ -30,12 +33,21 @@ export function useContractEvents({
   const { address: contractAddress, abi } = useBaseRPSContract();
   const { play, playTie } = useSoundEffects();
   const { sendBackgroundNotification, flashTitle } = useNotifications();
+  const { notifyOpponent, isInMiniApp } = usePushNotifications();
   const {
     setOpponentCommitted,
     setOpponentRevealed,
     setRoundResult,
     resetForOvertime,
   } = useGameStore();
+
+  // Helper to send push notification to opponent
+  const pushToOpponent = async (type: 'opponent-joined' | 'your-turn' | 'match-won' | 'match-lost' | 'match-draw' | 'overtime', wallet?: string) => {
+    const targetWallet = wallet || opponentWallet;
+    if (isInMiniApp && targetWallet) {
+      await notifyOpponent(type, matchId.toString(), targetWallet);
+    }
+  };
 
   // Watch for MatchJoined events
   useWatchContractEvent({
@@ -48,11 +60,15 @@ export function useContractEvents({
         const typedLog = log as unknown as EventLog<{ player2: `0x${string}` }>;
         const player2 = typedLog.args.player2;
         if (player2.toLowerCase() !== address?.toLowerCase()) {
+          // Someone joined MY match - notify me
           play('match-start');
           sendBackgroundNotification('opponent-joined', matchId);
           flashTitle('Battle Started!');
           toast.success('Opponent joined! Battle begins!');
           onMatchJoined?.(player2);
+        } else {
+          // I joined someone's match - notify THEM via push
+          pushToOpponent('opponent-joined');
         }
       }
     },
@@ -69,10 +85,14 @@ export function useContractEvents({
         const typedLog = log as unknown as EventLog<{ player: `0x${string}` }>;
         const player = typedLog.args.player;
         if (player.toLowerCase() !== address?.toLowerCase()) {
+          // Opponent committed - notify me
           setOpponentCommitted(true);
           sendBackgroundNotification('opponent-committed', matchId);
           toast('Opponent has committed their choice!', { icon: '🎯' });
           onOpponentCommitted?.();
+        } else {
+          // I committed - notify opponent it's their turn
+          pushToOpponent('your-turn');
         }
       }
     },
@@ -145,16 +165,21 @@ export function useContractEvents({
         if (args.wasDraw) {
           play('draw');
           sendBackgroundNotification('match-draw', matchId);
+          pushToOpponent('match-draw');
           flashTitle('Match Draw!');
           toast('Match ended in a draw! Bets refunded.', { icon: '🤝' });
         } else if (args.winner.toLowerCase() === address?.toLowerCase()) {
+          // I won - notify me and send loss notification to opponent
           play('win');
           sendBackgroundNotification('match-won', matchId);
+          pushToOpponent('match-lost');
           flashTitle('Victory!');
           toast.success('Victory! You won the match!');
         } else {
+          // I lost - notify me and send win notification to opponent
           play('lose');
           sendBackgroundNotification('match-lost', matchId);
+          pushToOpponent('match-won');
           flashTitle('Defeat!');
           toast.error('Defeat! Better luck next time!');
         }

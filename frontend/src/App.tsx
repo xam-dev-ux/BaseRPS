@@ -2,6 +2,7 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { ConnectButton } from './components/wallet/ConnectButton';
 import { SoundToggle } from './components/common/SoundToggle';
 import { NotificationToggle } from './components/common/NotificationToggle';
+import { PushNotificationToggle } from './components/common/PushNotificationToggle';
 import { Landing } from './pages/Landing';
 import { Play } from './pages/Play';
 import { Match } from './pages/Match';
@@ -49,6 +50,7 @@ function Navigation() {
 
           {/* Sound/Notification Toggle & Connect Button */}
           <div className="flex items-center gap-2">
+            <PushNotificationToggle />
             <NotificationToggle />
             <SoundToggle />
             <ConnectButton />

@@ -26,6 +26,7 @@
     "ogTitle": "BaseRPS - Battle for ETH",
     "ogDescription": "PvP Rock Paper Scissors on Base. Commit-reveal mechanics, overtime system, instant payouts.",
     "ogImageUrl": "https://base-rps-eight.vercel.app/embed-1200x800.png",
-    "noindex": false
+    "noindex": false,
+    "webhookUrl": "https://base-rps-eight.vercel.app/api/webhook"
   }
 }
