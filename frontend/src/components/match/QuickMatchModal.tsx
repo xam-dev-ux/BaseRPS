@@ -11,7 +11,7 @@ interface QuickMatchModalProps {
 }
 
 export function QuickMatchModal({ isOpen, onClose, onMatchFound }: QuickMatchModalProps) {
-  const [betAmount, setBetAmount] = useState('0.00001');
+  const [betAmount, setBetAmount] = useState('');
   const [gameMode, setGameMode] = useState<GameMode>(GAME_MODE.BO1);
   const [isSearching, setIsSearching] = useState(false);
   const [searchStatus, setSearchStatus] = useState('');
@@ -124,7 +124,8 @@ export function QuickMatchModal({ isOpen, onClose, onMatchFound }: QuickMatchMod
                       type="number"
                       value={betAmount}
                       onChange={(e) => setBetAmount(e.target.value)}
-                      step="0.001"
+                      placeholder="Enter bet amount"
+                      step="0.00001"
                       min={minBet ? formatEther(minBet) : '0.00001'}
                       max={maxBet ? formatEther(maxBet) : '1'}
                       className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:border-primary-500 focus:outline-none"
@@ -165,7 +166,7 @@ export function QuickMatchModal({ isOpen, onClose, onMatchFound }: QuickMatchMod
                   {/* Action Button */}
                   <button
                     onClick={handleQuickMatch}
-                    disabled={isCreating || isJoining}
+                    disabled={isCreating || isJoining || !betAmount}
                     className="w-full btn btn-primary py-4 text-lg font-bold"
                   >
                     {isCreating || isJoining ? (

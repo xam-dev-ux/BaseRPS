@@ -12,7 +12,7 @@ interface CreateMatchFormProps {
 
 export function CreateMatchForm({ onSuccess: _onSuccess }: CreateMatchFormProps) {
   const [gameMode, setGameMode] = useState<GameMode>(GAME_MODE.BO1);
-  const [betAmount, setBetAmount] = useState('0.00001');
+  const [betAmount, setBetAmount] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
   const [privateCode, setPrivateCode] = useState('');
 
@@ -87,7 +87,8 @@ export function CreateMatchForm({ onSuccess: _onSuccess }: CreateMatchFormProps)
           type="number"
           value={betAmount}
           onChange={(e) => setBetAmount(e.target.value)}
-          step="0.001"
+          placeholder="Enter bet amount"
+          step="0.00001"
           min={minBet ? formatEther(minBet) : '0.00001'}
           max={maxBet ? formatEther(maxBet) : '1'}
           className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:border-primary-500 focus:outline-none"
@@ -136,21 +137,21 @@ export function CreateMatchForm({ onSuccess: _onSuccess }: CreateMatchFormProps)
       <div className="mb-6 p-4 bg-gray-900 rounded-lg">
         <div className="flex justify-between text-sm text-gray-400">
           <span>Your Bet</span>
-          <span>{betAmount} ETH</span>
+          <span>{betAmount || '0'} ETH</span>
         </div>
         <div className="flex justify-between text-sm text-gray-400 mt-1">
           <span>Potential Pot</span>
-          <span>{parseFloat(betAmount) * 2} ETH</span>
+          <span>{betAmount ? parseFloat(betAmount) * 2 : '0'} ETH</span>
         </div>
       </div>
 
       {/* Submit */}
       <button
         type="submit"
-        disabled={isLoading || (isPrivate && !privateCode)}
+        disabled={isLoading || !betAmount || (isPrivate && !privateCode)}
         className="w-full btn btn-primary py-3 text-lg"
       >
-        {isLoading ? 'Creating...' : `Create Match (${betAmount} ETH)`}
+        {isLoading ? 'Creating...' : `Create Match${betAmount ? ` (${betAmount} ETH)` : ''}`}
       </button>
     </form>
   );
