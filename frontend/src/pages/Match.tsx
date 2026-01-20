@@ -7,7 +7,7 @@ import { Timer } from '@/components/common/Timer';
 import { useMatchInfo } from '@/contracts/hooks/useMatch';
 import { useJoinMatch, useJoinPrivateMatch, useCancelMatch, useCreateMatch } from '@/contracts/hooks/useBaseRPS';
 import { MATCH_STATE, GAME_MODE_NAMES, type GameMode } from '@/config/constants';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 
 export function Match() {
@@ -21,16 +21,19 @@ export function Match() {
 
   const { joinMatch, isPending: isJoining } = useJoinMatch();
   const { joinPrivateMatch, isPending: isJoiningPrivate } = useJoinPrivateMatch();
-  const { cancelMatch, isPending: isCancelling, isSuccess: isCancelSuccess } = useCancelMatch();
+  const { cancelMatch, isPending: isCancelling, isSuccess: isCancelSuccess, hash: cancelHash } = useCancelMatch();
   const { createMatch, isPending: isCreatingRematch } = useCreateMatch();
+
+  const processedCancelHash = useRef<string | null>(null);
 
   // Redirect after successful cancel
   useEffect(() => {
-    if (isCancelSuccess) {
+    if (isCancelSuccess && cancelHash && cancelHash !== processedCancelHash.current) {
+      processedCancelHash.current = cancelHash;
       toast.success('Match cancelled successfully');
       navigate('/play');
     }
-  }, [isCancelSuccess, navigate]);
+  }, [isCancelSuccess, cancelHash, navigate]);
 
   const handleRematch = async () => {
     if (!matchInfo) return;

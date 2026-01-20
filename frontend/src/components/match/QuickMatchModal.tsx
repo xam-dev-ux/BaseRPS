@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatEther, parseEther } from 'viem';
 import { useCreateMatch, useJoinMatch, useOpenMatches, useMinBet, useMaxBet } from '@/contracts/hooks/useBaseRPS';
 import { GAME_MODE, GAME_MODE_NAMES, type GameMode } from '@/config/constants';
+import toast from 'react-hot-toast';
 
 interface QuickMatchModalProps {
   isOpen: boolean;
@@ -11,6 +13,7 @@ interface QuickMatchModalProps {
 }
 
 export function QuickMatchModal({ isOpen, onClose, onMatchFound }: QuickMatchModalProps) {
+  const navigate = useNavigate();
   const [betAmount, setBetAmount] = useState('');
   const [gameMode, setGameMode] = useState<GameMode>(GAME_MODE.BO1);
   const [isSearching, setIsSearching] = useState(false);
@@ -20,8 +23,31 @@ export function QuickMatchModal({ isOpen, onClose, onMatchFound }: QuickMatchMod
   const { data: maxBetData } = useMaxBet();
   const { data: openMatchIdsData } = useOpenMatches(0n, 50n);
 
-  const { createMatch, isPending: isCreating } = useCreateMatch();
-  const { joinMatch, isPending: isJoining } = useJoinMatch();
+  const { createMatch, isPending: isCreating, isSuccess: isCreateSuccess, hash: createHash } = useCreateMatch();
+  const { joinMatch, isPending: isJoining, isSuccess: isJoinSuccess, hash: joinHash } = useJoinMatch();
+
+  const processedCreateHash = useRef<string | null>(null);
+  const processedJoinHash = useRef<string | null>(null);
+
+  // Redirect after successful match creation
+  useEffect(() => {
+    if (isCreateSuccess && createHash && createHash !== processedCreateHash.current) {
+      processedCreateHash.current = createHash;
+      toast.success('Match created! Waiting for opponent...');
+      onClose();
+      navigate('/my-battles');
+    }
+  }, [isCreateSuccess, createHash, onClose, navigate]);
+
+  // Redirect after successful join
+  useEffect(() => {
+    if (isJoinSuccess && joinHash && joinHash !== processedJoinHash.current) {
+      processedJoinHash.current = joinHash;
+      toast.success('Joined match!');
+      onClose();
+      navigate('/my-battles');
+    }
+  }, [isJoinSuccess, joinHash, onClose, navigate]);
 
   const minBet = minBetData as bigint | undefined;
   const maxBet = maxBetData as bigint | undefined;
@@ -47,9 +73,7 @@ export function QuickMatchModal({ isOpen, onClose, onMatchFound }: QuickMatchMod
         // No matches found, create one
         setSearchStatus('No matches found. Creating one...');
         await createMatch(bet, gameMode, false);
-        // Note: We need to watch for MatchCreated event to get the matchId
-        // For now, just close the modal - user will be navigated via isSuccess
-        onClose();
+        // Redirect handled by useEffect when isCreateSuccess becomes true
       }
     } catch (error) {
       console.error('Quick match failed:', error);

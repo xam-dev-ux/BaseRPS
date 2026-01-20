@@ -1,14 +1,104 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import { formatEther } from 'viem';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CreateMatchForm } from '@/components/match/CreateMatchForm';
-import { MatchList } from '@/components/match/MatchCard';
 import { QuickMatchModal } from '@/components/match/QuickMatchModal';
-import { useOpenMatches, useOpenMatchCount, useJoinMatch } from '@/contracts/hooks/useBaseRPS';
-import type { GameMode, MatchState } from '@/config/constants';
+import { useOpenMatches, useOpenMatchCount, useJoinMatch, useMatch } from '@/contracts/hooks/useBaseRPS';
+import { GAME_MODE_NAMES, MATCH_STATE_NAMES, type GameMode, type MatchState } from '@/config/constants';
 
 type Tab = 'create' | 'join';
+
+// Component to display a single open match with real data
+function OpenMatchCard({
+  matchId,
+  onJoin,
+  onView,
+  isJoining,
+}: {
+  matchId: bigint;
+  onJoin: (matchId: bigint, betAmount: bigint) => void;
+  onView: (matchId: bigint) => void;
+  isJoining: boolean;
+}) {
+  const { data: matchData, isLoading } = useMatch(matchId);
+
+  if (isLoading) {
+    return (
+      <div className="card animate-pulse">
+        <div className="h-20 bg-gray-700 rounded"></div>
+      </div>
+    );
+  }
+
+  if (!matchData) return null;
+
+  const match = matchData as {
+    player1: `0x${string}`;
+    player2: `0x${string}`;
+    betAmount: bigint;
+    gameMode: number;
+    state: number;
+    isPrivate: boolean;
+  };
+
+  const truncateAddress = (addr: string) =>
+    `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+
+  return (
+    <motion.div
+      className="card hover:border-primary-500 transition-colors cursor-pointer"
+      onClick={() => onView(matchId)}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <div className="flex justify-between items-start mb-4">
+        <div>
+          <div className="text-sm text-gray-400">Match #{matchId.toString()}</div>
+          <div className="text-lg font-bold">{GAME_MODE_NAMES[match.gameMode as GameMode]}</div>
+        </div>
+        <div className="flex items-center gap-2">
+          {match.isPrivate && (
+            <span className="px-2 py-1 text-xs bg-purple-900 text-purple-300 rounded">
+              Private
+            </span>
+          )}
+          <span className="px-2 py-1 text-xs bg-gray-700 text-gray-300 rounded">
+            {MATCH_STATE_NAMES[match.state as MatchState]}
+          </span>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center mb-4">
+        <div>
+          <div className="text-sm text-gray-400">Creator</div>
+          <div className="font-mono">{truncateAddress(match.player1)}</div>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center">
+        <div>
+          <div className="text-sm text-gray-400">Pot</div>
+          <div className="text-xl font-bold text-primary-400">
+            {formatEther(match.betAmount * 2n)} ETH
+          </div>
+        </div>
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onJoin(matchId, match.betAmount);
+          }}
+          disabled={isJoining}
+          className="btn btn-primary"
+        >
+          {isJoining ? 'Joining...' : `Join (${formatEther(match.betAmount)} ETH)`}
+        </button>
+      </div>
+    </motion.div>
+  );
+}
 
 export function Play() {
   const navigate = useNavigate();
@@ -24,35 +114,6 @@ export function Play() {
   const openMatchIds = openMatchIdsData as bigint[] | undefined;
 
   const { joinMatch, isSuccess: joinSuccess } = useJoinMatch();
-
-  // Fetch match details for each open match
-  const [matchDetails, setMatchDetails] = useState<Array<{
-    matchId: bigint;
-    player1: `0x${string}`;
-    player2: `0x${string}`;
-    betAmount: bigint;
-    gameMode: GameMode;
-    state: MatchState;
-    isPrivate: boolean;
-  }>>([]);
-
-  // This is simplified - in production you'd use proper data fetching
-  useEffect(() => {
-    if (openMatchIds && openMatchIds.length > 0) {
-      // For demo purposes, we'll just show the IDs
-      // In real implementation, batch fetch match details
-      const details = openMatchIds.map((id: bigint) => ({
-        matchId: id,
-        player1: '0x0000000000000000000000000000000000000001' as `0x${string}`,
-        player2: '0x0000000000000000000000000000000000000000' as `0x${string}`,
-        betAmount: BigInt(10000000000000000), // 0.01 ETH
-        gameMode: 0 as GameMode,
-        state: 1 as MatchState,
-        isPrivate: false,
-      }));
-      setMatchDetails(details);
-    }
-  }, [openMatchIds]);
 
   // Navigate to match after successful join
   useEffect(() => {
@@ -133,13 +194,23 @@ export function Play() {
               </button>
             </div>
 
-            <MatchList
-              matches={matchDetails}
-              onJoin={handleJoinMatch}
-              onView={handleViewMatch}
-              joiningMatchId={joiningMatchId}
-              emptyMessage="No open matches. Create one!"
-            />
+            {openMatchIds && openMatchIds.length > 0 ? (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {openMatchIds.map((matchId) => (
+                  <OpenMatchCard
+                    key={matchId.toString()}
+                    matchId={matchId}
+                    onJoin={handleJoinMatch}
+                    onView={handleViewMatch}
+                    isJoining={joiningMatchId === matchId}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 text-gray-400">
+                No open matches. Create one!
+              </div>
+            )}
 
             {/* Join by ID */}
             <div className="mt-8 card">

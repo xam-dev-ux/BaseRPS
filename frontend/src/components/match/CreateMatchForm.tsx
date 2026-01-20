@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { formatEther, parseEther, zeroHash } from 'viem';
 import { useCreateMatch, useMinBet, useMaxBet } from '@/contracts/hooks/useBaseRPS';
@@ -11,6 +12,7 @@ interface CreateMatchFormProps {
 }
 
 export function CreateMatchForm({ onSuccess: _onSuccess }: CreateMatchFormProps) {
+  const navigate = useNavigate();
   const [gameMode, setGameMode] = useState<GameMode>(GAME_MODE.BO1);
   const [betAmount, setBetAmount] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
@@ -18,7 +20,18 @@ export function CreateMatchForm({ onSuccess: _onSuccess }: CreateMatchFormProps)
 
   const { data: minBetData } = useMinBet();
   const { data: maxBetData } = useMaxBet();
-  const { createMatch, isPending, isConfirming } = useCreateMatch();
+  const { createMatch, isPending, isConfirming, isSuccess, hash } = useCreateMatch();
+
+  const processedHash = useRef<string | null>(null);
+
+  // Redirect after successful match creation
+  useEffect(() => {
+    if (isSuccess && hash && hash !== processedHash.current) {
+      processedHash.current = hash;
+      toast.success('Match created! Waiting for opponent...');
+      navigate('/my-battles');
+    }
+  }, [isSuccess, hash, navigate]);
 
   const minBet = minBetData as bigint | undefined;
   const maxBet = maxBetData as bigint | undefined;
@@ -44,9 +57,7 @@ export function CreateMatchForm({ onSuccess: _onSuccess }: CreateMatchFormProps)
         : zeroHash;
 
       await createMatch(bet, gameMode, isPrivate, codeHash);
-
-      toast.success('Match created! Waiting for opponent...');
-      // TODO: Get matchId from transaction receipt and call _onSuccess
+      // Redirect handled by useEffect when isSuccess becomes true
     } catch (error) {
       console.error('Failed to create match:', error);
       toast.error('Failed to create match');
