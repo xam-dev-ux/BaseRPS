@@ -10,6 +10,8 @@ import { Match } from './pages/Match';
 import { Stats } from './pages/Stats';
 import { MyBattles } from './pages/MyBattles';
 import { Leaderboard } from './pages/Leaderboard';
+import { Terms } from './pages/Terms';
+import { Privacy } from './pages/Privacy';
 
 function Navigation() {
   const location = useLocation();
@@ -111,6 +113,8 @@ function App() {
           <Route path="/stats" element={<Stats />} />
           <Route path="/my-battles" element={<MyBattles />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
         </Routes>
       </main>
     </div>

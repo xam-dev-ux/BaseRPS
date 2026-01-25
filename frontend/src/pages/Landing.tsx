@@ -169,8 +169,26 @@ export function Landing() {
 
       {/* Footer */}
       <footer className="py-8 px-4 border-t border-gray-800">
-        <div className="container mx-auto text-center text-gray-500">
-          <p>BaseRPS - Built on Base Network</p>
+        <div className="container mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-gray-500">BaseRPS - Built on Base Network</p>
+            <div className="flex items-center gap-6 text-sm">
+              <Link to="/terms" className="text-gray-500 hover:text-gray-300 transition-colors">
+                Terms of Service
+              </Link>
+              <Link to="/privacy" className="text-gray-500 hover:text-gray-300 transition-colors">
+                Privacy Policy
+              </Link>
+              <a
+                href="https://github.com/xabierbr/BaseRPS"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-gray-300 transition-colors"
+              >
+                GitHub
+              </a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
