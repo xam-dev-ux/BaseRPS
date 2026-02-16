@@ -18,11 +18,12 @@
     "@tanstack/react-query": "^5.17.19",
     "connectkit": "^1.7.2",
     "framer-motion": "^10.18.0",
+    "ox": "^0.12.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.21.2",
-    "viem": "^2.7.1",
+    "viem": "^2.46.1",
     "wagmi": "^2.5.7",
     "zustand": "^4.4.7"
   },
